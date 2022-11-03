@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: app-clone-123
+  labels:
+    tekton.dev/pipeline: app-clone
+spec:
+  serviceAccountName: github-bot
+  pipelineRef:
+    name: app-clone
+  params:
+    - name: private-github-repo-url
+      value: https://github.com/Sudo-BangBang/str-hello-service.git
+  workspaces:
+    - name: source
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
