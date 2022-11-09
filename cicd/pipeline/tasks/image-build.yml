@@ -14,4 +14,4 @@ run:
   path: build
 
 outputs:
-  - name: built-image
+  - name: image

@@ -13,14 +13,14 @@ resources:
       repository: ((docker-hub-username))/((docker-hub-repo-name))
 
 jobs:
-  - name: test
-    public: true
-    max_in_flight: 5
-    plan:
-      - get: spring-boot-service
-        trigger: true
-      - task: mvn-test
-        file: "spring-boot-service/cicd/pipeline/tasks/maven-test.yml"
+  #- name: test
+  #  public: true
+  #  max_in_flight: 5
+  #  plan:
+  #    - get: spring-boot-service
+  #      trigger: true
+  #    - task: mvn-test
+  #      file: "spring-boot-service/cicd/pipeline/tasks/maven-test.yml"
   - name: build-image
     public: true
     serial: true
@@ -28,14 +28,14 @@ jobs:
     plan:
       - get: spring-boot-service
         trigger: true
-        passed: [test]
+        #passed: [test]
       - task: image-build
         file: "spring-boot-service/cicd/pipeline/tasks/image-build.yml"
         privileged: true
       - put: spring-boot-service-docker-repository
         params:
           version: 0.0.1
-          image: built-image/built-image.tar
+          image: image/image.tar
         #  build: spring-boot-service-out
 
 # fly -t ps set-pipeline -c pipeline.yml -p str-hello-service-pipeline
