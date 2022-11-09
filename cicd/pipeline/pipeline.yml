@@ -31,6 +31,7 @@ jobs:
         passed: [test]
       - task: image-build
         file: "spring-boot-service/cicd/pipeline/tasks/image-build.yml"
+        privileged: true
       - put: spring-boot-service-docker-repository
         params:
           version: 0.0.1
