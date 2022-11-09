@@ -1,0 +1,17 @@
+---
+platform: linux
+
+image_resource:
+  type: registry-image
+  source:
+    repository: concourse/oci-build-task
+
+inputs:
+  - name: spring-boot-service
+    path: .
+
+run:
+  path: build
+
+outputs:
+  - name: built-image
