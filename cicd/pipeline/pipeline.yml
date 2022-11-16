@@ -5,6 +5,16 @@ resources:
       uri: https://github.com/Sudo-BangBang/str-hello-service.git
       branch: main
 
+  - name: version
+    type: semver
+    source:
+      driver: git
+      uri: https://github.com/Sudo-BangBang/str-hello-service.git
+      branch: main
+      file: version
+      private_key: {{github-private-key}}
+      username: concourse
+
   - name: spring-boot-service-docker-repository
     type: registry-image
     source:
@@ -18,9 +28,29 @@ jobs:
     max_in_flight: 5
     plan:
       - get: spring-boot-service
-        trigger: true
+        trigger: false
       - task: mvn-test
         file: "spring-boot-service/cicd/pipeline/tasks/maven-test.yml"
+  - name: bump-version-minor
+    public: true
+    max_in_flight: 5
+    plan:
+      - get: spring-boot-service
+      - get: version
+        params: { bump: minor }
+#      - get: version
+#        params: { bump: minor }
+
+#      - put: version
+#        params: { bump: minor }
+#        trigger: true
+      - task: display-version
+        file: "spring-boot-service/cicd/pipeline/tasks/display-version.yml"
+        privileged: true
+
+      - put: version
+        params: { file: version/version }
+
   - name: build-image
     public: true
     serial: true
@@ -28,7 +58,7 @@ jobs:
     plan:
       - get: spring-boot-service
         trigger: true
-        passed: [test]
+#        passed: [bump-version-minor]
       - task: image-build
         file: "spring-boot-service/cicd/pipeline/tasks/image-build.yml"
         privileged: true
