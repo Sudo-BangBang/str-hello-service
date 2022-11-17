@@ -1,0 +1,17 @@
+# Docker
+docker-hub-email: samueltaylor@btopenworld.com
+docker-hub-username: ausername123
+docker-hub-password: l7YUi64Yj2LfhvMT664iI356PBrcYhZCdO8u
+docker-hub-repo-name: str
+
+
+# Github
+github-private-key: |
+  -----BEGIN OPENSSH PRIVATE KEY-----
+  b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+  QyNTUxOQAAACBVauikwvsHodvTiavb3yKXBORpCirAD6xYmPzbzvFybAAAAKB7Wvh2e1r4
+  dgAAAAtzc2gtZWQyNTUxOQAAACBVauikwvsHodvTiavb3yKXBORpCirAD6xYmPzbzvFybA
+  AAAED4vpKPrzIQ4kJAg5DrLamZvIq1I1AgWlSxGXxnPO00JlVq6KTC+weh29OJq9vfIpcE
+  5GkKKsAPrFiY/NvO8XJsAAAAGmNvbmNvdXJzZUBjb21wbGV4c3RvcmUuY29tAQID
+  -----END OPENSSH PRIVATE KEY-----
+github-public-key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFVq6KTC+weh29OJq9vfIpcE5GkKKsAPrFiY/NvO8XJs concourse@complexstore.com
