@@ -5,15 +5,14 @@ resources:
       uri: https://github.com/Sudo-BangBang/str-hello-service.git
       branch: main
 
-  - name: version
+  - name: version_resource
     type: semver
     source:
       driver: git
-      uri: https://github.com/Sudo-BangBang/str-hello-service.git
+      uri: git@github.com:Sudo-BangBang/str-hello-service.git
       branch: main
       file: version
       private_key: {{github-private-key}}
-      username: concourse
 
   - name: spring-boot-service-docker-repository
     type: registry-image
@@ -36,34 +35,30 @@ jobs:
     max_in_flight: 5
     plan:
       - get: spring-boot-service
-      - get: version
+        trigger: true
+        passed: [test]
+      - get: version_resource
         params: { bump: minor }
-#      - get: version
-#        params: { bump: minor }
-
-#      - put: version
-#        params: { bump: minor }
-#        trigger: true
-      - task: display-version
-        file: "spring-boot-service/cicd/pipeline/tasks/display-version.yml"
-        privileged: true
-
-      - put: version
-        params: { file: version/version }
-
+      - put: version_resource
+        params: { file: version_resource/version }
   - name: build-image
     public: true
     serial: true
     max_in_flight: 5
     plan:
       - get: spring-boot-service
+        passed: [bump-version-minor]
+      - get: version_resource
         trigger: true
-#        passed: [bump-version-minor]
+        passed: [bump-version-minor]
+      - load_var: version_var
+        file: spring-boot-service/version
+        reveal: true
       - task: image-build
         file: "spring-boot-service/cicd/pipeline/tasks/image-build.yml"
         privileged: true
       - put: spring-boot-service-docker-repository
         params:
-          version: 0.0.1
+          version: ((.:version_var))
           image: image/image.tar
 # fly -t str set-pipeline -p str-hello-service-pipeline -c pipeline.yml -l config.yml
